@@ -1,0 +1,42 @@
+---
+
+- name: Inserting pam_tally2.so 
+  pamd:
+    name: password-auth
+    type: account
+    control: required
+    module_path: pam_unix.so
+    new_type: account
+    new_control: required
+    new_module_path: pam_tally2.so
+    state: before
+
+- name: Inserting unlock time
+  pamd:
+    name: password-auth
+    type: auth
+    control: required
+    module_path: pam_env.so
+    new_type: auth
+    new_control: required
+    new_module_path: pam_tally2.so
+    module_arguments: 'file=/var/log/tallylog deny=3 unlock_time=1800'
+    state: before
+
+- name: updating remember=5 
+  pamd:
+    name: system-auth
+    type: password
+    control: sufficient
+    module_path: pam_unix.so
+    module_arguments: 'pam_unix.so sha512 shadow nullok try_first_pass use_authtok remember=5'
+    state: updated
+  
+- name: Configure pwquality.conf file 
+  template: src=pwquality.conf.j2 dest=/etc/security/pwquality.conf owner=root group=root mode=0644 backup=yes
+  when: ansible_os_family == 'RedHat' or ansible_distribution == 'Centos' and ansible_distribution_version == '7'
+  
+- name: Configure inittab file 
+  template: src=inittab.j2 dest=/etc/inittab owner=root group=root mode=0644 
+  when: ansible_os_family == 'RedHat' or ansible_distribution == 'Centos' and ansible_distribution_version == '7'
+ 

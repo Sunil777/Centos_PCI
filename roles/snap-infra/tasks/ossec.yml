@@ -1,0 +1,46 @@
+--- 
+# Tasks specific for RedHat systems
+- name: Install EPEL
+  become: true
+  yum:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: present
+  
+ 
+- name: Install wazuh repo
+  become: true
+  template: src="{{ path }}/roles/ServerStart/templates/wazuh.repo.j2"
+            dest=/etc/yum.repos.d/wazuh.repo
+            owner=root
+            group=root
+            mode=0644
+  
+- name: Install ossec-hids-agent
+  yum:
+    name: ossec-hids-agent
+    state: present
+    
+# tasks file for ossec-agent
+
+
+  
+- name: Set ossec deploy facts for RedHat
+  set_fact:
+    ossec_agent_config_filename: ossec-agent.conf
+    ossec_init_name: ossec-hids
+#  when: ansible_os_family == "RedHat"
+
+- name: "Installing the ossec-agent.conf"
+  template: src="{{ path }}/roles/ServerStart/templates/ossec-agent.conf.j2"
+            dest=/var/ossec/etc/ossec.conf
+            owner=root
+            group=root
+            mode=0400
+            
+- name: Adding key on ossec-serverr
+  shell: /var/ossec/bin/agent-auth -m {{ ossec_server_ip }} -p 1515
+  ignore_errors: yes
+ 
+- name: Restart ossec agent
+  shell: "/etc/init.d/ossec-hids-agent restart"
+  ignore_errors: yes

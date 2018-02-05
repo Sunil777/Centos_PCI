@@ -1,0 +1,9 @@
+---
+# defaults file for ossec-agent
+
+ossec_server_ip: "172.16.12.144"
+
+proxy_environment:
+  https_proxy: http://10.50.8.11:3128
+  http_proxy: http://10.50.8.11:3128
+

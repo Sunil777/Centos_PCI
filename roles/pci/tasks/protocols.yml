@@ -1,0 +1,16 @@
+---
+
+- name: Disable Datagram Congestion Control Protocol (DCCP)
+  command: echo "install dccp /bin/false" > /etc/modprobe.d/dccp.conf
+  
+- name: Disable Stream Control Transmission Protocol (SCTP)
+  command: echo "install sctp /bin/false" > /etc/modprobe.d/sctp.conf
+  
+- name: Disable Reliable Datagram Sockets (RDS)
+  command: echo "install rds /bin/false" > /etc/modprobe.d/rds.conf
+  
+- name: Disable Transparent Inter-Process Communication (TIPC)
+  command: echo echo "install tipc /bin/false" > /etc/modprobe.d/tipc.con
+  
+ 
+

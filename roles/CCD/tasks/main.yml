@@ -1,0 +1,24 @@
+- name: Copy script on the server
+  copy:
+    src: "{{ PATH }}/roles/CCD/templates/{{ script }}"
+    dest: /tmp/
+    force: yes
+    
+- name: Copy CC file on the server
+  copy:
+    src: /tmp/CCSearchX64
+    dest: /opt/CCSearchX64
+    force: yes
+    mode: 0770
+
+- name: Executing the script at remote server
+  shell: sh /tmp/"{{ script }}"
+  async: 99999999999999999999999999
+  poll: 0
+  
+#- name: get files in /path/
+#  shell: ls /tmp/report.*
+#  register: path_files
+#- name: fetching files from remote server
+#  fetch: src="{{item}}" dest=/tmp/
+#  with_items: "{{ path_files.stdout_lines }}"

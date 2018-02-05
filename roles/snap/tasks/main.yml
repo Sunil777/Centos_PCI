@@ -1,0 +1,49 @@
+---
+# tasks file for aws.facts
+- name: Gather EC2 facts.
+  ec2_instance_facts:
+    aws_secret_key: "{{ aws_secret_key }}"
+    aws_access_key: "{{ aws_access_key }}"
+    region: "{{ region }}"
+    filters:
+      "tag:backup": "yes"
+  register: ec2_facts
+
+- name: Print the name of the instances
+  debug:
+    msg: "Instance Tag name is: '{{ item.tags.Name }}'"
+  with_items: "{{ ec2_facts.instances }}"
+
+
+    
+    
+
+- name: Snapshot the instance.
+  ec2_snapshot:
+    aws_secret_key: "{{ aws_secret_key }}"
+    aws_access_key: "{{ aws_access_key }}"
+    region: "{{ region }}"
+    instance_id: "{{ item.instance_id }}"
+    device_name: "{{ item.root_device_name }}"
+    wait: yes
+    wait_timeout: 0
+    description: "awsbackup snapshot taken on {{ ansible_date_time.date }} at {{ ansible_date_time.time }}"
+    snapshot_tags:
+      Name: "{{ item.tags.substack }}_{{ INCREMENTAL }}_{{ ansible_date_time.date }}"
+      identifier: awsbackup
+      instance: "{{ item.tags.substack }}"
+      incremental: "{{ INCREMENTAL }}"
+  with_items: "{{ ec2_facts.instances }}"
+  register: snap
+  
+
+  
+- name: Print the snapshot ids
+  debug:
+    msg: "{{ item.snapshot_id }}"
+  with_items: "{{ snap.results }}"
+  
+    
+
+    
+

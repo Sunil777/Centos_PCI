@@ -1,0 +1,5 @@
+---
+- name: Configure /etc/profile.d/os-security.sh file 
+  template: src=os-security.sh.j2 dest=/etc/profile.d/os-security.sh owner=root group=root mode=0755 
+  register: security
+  

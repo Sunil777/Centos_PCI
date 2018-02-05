@@ -1,0 +1,46 @@
+---
+
+- name: cheking sshd file
+  shell: cat  /etc/ssh/sshd_config | grep "Port\|Protocol\|PermitRootLogin\|MaxAuthTries\|UsePAM\|Banner\|ClientAlive" | grep -v '#'
+  register: sshd
+  ignore_errors: yes
+  
+- name: cheking security file
+  shell: cat /etc/security/pwquality.conf |grep "difok\|minlen\|dcredit\|ucredit\|lcredit\|ocredit\|minclass" | grep -v '#' 
+  register: security
+  ignore_errors: yes
+  
+- name: cheking system-auth
+  shell: cat /etc/pam.d/system-auth | grep 'remember=5'
+  register: system
+  ignore_errors: yes
+  
+- name: cheking password-auth
+  shell: cat /etc/pam.d/password-auth | grep 'pam_tally2.so'
+  register: password
+  ignore_errors: yes
+
+- name: cheking visudo file
+  shell: cat /etc/sudoers | grep "ALL=(ALL)" | grep -v "#"
+  register: sudoers
+  ignore_errors: yes
+  
+- name: cheking Symantec
+  shell: cd /opt/Symantec/symantec_antivirus; ./sav manage -s
+  register: symantec
+  ignore_errors: yes
+  
+- name: cheking Ossec
+  shell: ps -aux | grep ossec | grep -v grep
+  register: ossec
+  ignore_errors: yes
+
+
+  
+- debug: var=sshd.stdout_lines
+- debug: var=security.stdout_lines
+- debug: var=system.stdout_lines
+- debug: var=password.stdout_lines
+- debug: var=sudoers.stdout_lines
+- debug: var=symantec.stdout_lines
+- debug: var=ossec.stdout_lines

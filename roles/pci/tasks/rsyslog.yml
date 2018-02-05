@@ -1,0 +1,8 @@
+---
+- name: Configure /etc/rsyslog.conf file 
+  template: src=rsyslog.conf.j2 dest=/etc/rsyslog.conf owner=root group=root mode=0644 backup=yes
+  register: syslog
+  
+- name: Restart rsyslog service
+  service: name=rsyslog state=restarted
+  when: syslog.changed

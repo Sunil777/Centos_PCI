@@ -1,0 +1,4 @@
+---
+- name: Configure /etc/sysconfig/network file 
+  template: src=network.j2 dest=/etc/sysconfig/network owner=root group=root mode=0644 
+  register: network

@@ -1,0 +1,22 @@
+galaxy_info:
+  author: Aymeric Bringard <diadzine@gmail.com>
+  description: Installing wazuh ossec-agent.
+
+  license: MIT
+
+  min_ansible_version: 2.2
+
+  platforms:
+  - name: EL
+    versions:
+      - 6
+      - 7
+
+  galaxy_tags:
+    - ossec
+    - wazuh
+    - agent
+    - log
+    - monitoring
+    - system
+    - security

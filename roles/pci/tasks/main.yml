@@ -1,0 +1,46 @@
+---
+
+- include: history.yml
+  tags: [ common, history ]
+
+- include: pamd.yml
+  tags: [ common, group ]
+
+- include: rsyslog.yml 
+  tags: [ common, repos ]
+- include: ssh.yml 
+  tags: [ common, dselect ]
+  
+- include: chrony.yml 
+  tags: [ common, chrony ] 
+  
+- include: sudoers.yml 
+  tags: [ common, sudo ] 
+
+- include: sysctl.yml 
+  tags: [ common, sysctl ]
+ 
+- include: sysstat.yml 
+  tags: [ common, sysstat ]
+
+- include: security.yml 
+  tags: [ common, security ]  
+  
+- include: protocols.yml 
+  tags: [ common, protocol ]   
+  
+  
+#- include: os_har.yml 
+#  tags: [ common, os_har ] 
+
+
+
+  
+- include: network.yml 
+  tags: [ common, network ]
+ 
+- include: "{{ path }}/roles/ServerStart/tasks/symentic.yml"
+- include: "{{ path }}/roles/ServerStart/tasks/ossec.yml"
+  
+
+

@@ -1,0 +1,19 @@
+---
+- local_action:
+    module: ec2_elb_lb
+    name: "{{ elb_name }}""
+    state: present
+    zones:
+      - ap-south-1a
+      - ap-south-1b
+    listeners:
+      - protocol: http # options are http, https, ssl, tcp
+        load_balancer_port: 80
+        instance_port: 80
+        proxy_protocol: True
+      - protocol: https
+        load_balancer_port: 443
+        instance_protocol: http # optional, defaults to value of protocol setting
+        instance_port: 80
+        # ssl certificate required for https or ssl
+        ssl_certificate_id: "arn:aws:iam::5313-4162-8109:server-certificate/company/servercerts/ProdServerCert"

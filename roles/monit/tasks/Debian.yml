@@ -1,0 +1,34 @@
+- name: install monit
+  apt: name=monit state=present
+  when: ansible_os_family == 'Debian'
+- name: render monit.conf
+  template:
+    src=templates/monitrc.j2
+    dest=/etc/monit/monitrc
+- name: mkdir monit.d
+  file: path=/etc/monit/monitrc.d
+        state=directory
+        owner=root
+        group=root
+        mode=0700
+- name: deploy monit/filesystem
+  copy:
+    src: filesystem
+    dest: /etc/monit/monitrc.d/filesystem
+- name: deploy monit/loadavgmemoryswap
+  copy:
+    src: loadavgmemoryswap
+    dest: /etc/monit/monitrc.d/loadavgmemoryswap
+- name: deploy monit/sshd
+  copy:
+    src: sshd
+    dest: /etc/monit/monitrc.d/sshd
+- name: deploy monit/nginx
+  copy:
+    src: nginx
+    dest: /etc/monit/monitrc.d/nginx
+- name: systemctl enable monit
+  systemd:
+    name: monit
+    state: started
+    enabled: True

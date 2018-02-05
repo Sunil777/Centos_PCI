@@ -1,0 +1,16 @@
+---
+
+- name: Configure /etc/httpd/conf/httpd.conf file 
+  template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf owner=root group=root mode=0644 backup=yes
+  register: apache
+  
+- name: Reloaded httpd service
+  service: name=httpd state=reloaded
+  when:  apache.changed
+  
+- name: wait for httpd to start
+  wait_for: port="{{ item }}"
+  with_items:
+    - 443
+    - 80
+   

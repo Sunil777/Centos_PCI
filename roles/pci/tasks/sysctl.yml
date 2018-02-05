@@ -1,0 +1,15 @@
+---
+
+- name: Configure sysctl.conf  file 
+  template: src=sysctl.conf.j2 dest=/etc/sysctl.conf owner=root group=root mode=0644 backup=yes
+  when: ansible_os_family == 'RedHat' or ansible_distribution == 'Centos' and ansible_distribution_version == '7'
+
+  
+- name: Configure login.defs file 
+  template: src=login.defs.j2 dest=/etc/login.defs owner=root group=root mode=0644 backup=yes
+  when: ansible_os_family == 'RedHat' or ansible_distribution == 'Centos' and ansible_distribution_version == '7'
+  
+- name: Configure limits.conf file file 
+  template: src=limits.conf.j2 dest=/etc/security/limits.conf owner=root group=root mode=0644 backup=yes
+  when: ansible_os_family == 'RedHat' or ansible_distribution == 'Centos' and ansible_distribution_version == '7'
+  

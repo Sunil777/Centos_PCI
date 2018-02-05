@@ -1,0 +1,89 @@
+---
+## Deleting unwnated users
+- user: name={{item}} state=absent remove=yes
+  ignore_errors: True
+  with_items: 
+    - games
+    - ftp
+    - dag
+    - avahi
+    - postfix
+  
+## Deleting unwanted groups
+- group: name={{item}} state=absent
+  ignore_errors: True
+  with_items:
+    - floppy
+    - tape
+    - audio
+    - video
+    - postdrop
+    - cdrom
+    - stapusr
+    - stapsys
+    - stapdev
+  
+- name: Remove list of packages
+  yum: name={{item}} state=absent
+  ignore_errors: True
+  with_items:
+    - xinetd
+    - telnet-server
+    - rsh-server
+    - rsh
+    - ypbind
+    - ypserv
+    - tftp-server
+    - bind
+    - dovecot
+    - squid
+    - net-snmpd
+    - postfix
+    - mailx
+      
+- name: disabling Services
+  command: systemctl disable {{item}}
+  ignore_errors: True
+  with_items:
+    - firewalld
+    - xinetd
+    - rexec
+    - rsh
+    - rlogin
+    - ypbind
+    - tftp
+    - certmonger
+    - cgconfig
+    - cgred
+    - cpuspeed
+    - kdump
+    - mdmonitor
+    - messagebus
+    - netconsole
+    - ntpdate
+    - oddjobd
+    - portreserve
+    - qpidd
+    - quota_nld
+    - rdisc
+    - rhnsd
+    - rhsmcertd
+    - saslauthd
+    - smartd
+    - atd
+    - nfslock
+    - named
+    - dovecot
+    - squid
+    - snmpd
+    - rpcgssd
+    - rpcsvcgssd
+    - rpcidmapd
+    - netfs
+    - avahi-daemon
+    - cups
+    - dhcpd
+    - postfix
+
+  
+  

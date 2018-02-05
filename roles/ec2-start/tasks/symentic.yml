@@ -1,0 +1,45 @@
+---
+- name: Copy all Pakages to remote server
+  copy: src={{ item }} dest=/tmp/ owner=root group=root
+  with_items:
+  - "{{ path }}/Pakages/jre-8u51-linux-x64.tar.gz"
+  - "{{ path }}/Pakages/US_export_policy.jar"
+  - "{{ path }}/Pakages/local_policy.jar" 
+  - "{{ path }}/Pakages/SymantecEndpointProtection.zip"
+  - "{{ path }}/Pakages/install.sh"
+- name: Unistalling Symantic if already installed
+  shell: echo Y | sh /opt/Symantec/symantec_antivirus/uninstall.sh
+  ignore_errors: yes
+  
+- name: Creating Java Dir
+  shell: mkdir -p /usr/java; cd /usr/java; cp /tmp/jre-8u51-linux-x64.tar.gz  /usr/java 
+- name: Extract File   
+  shell: cd /usr/java; tar -zxvf jre-8u51-linux-x64.tar.gz 
+- name: Delete Tar file
+  shell: cd /usr/java; rm -f jre-8u51-linux-x64.tar.gz 
+- name: Delete new created jar files and Copy from /tmp
+  shell: cd /usr/java/jre1.8.0_51/lib/security; rm -f local_policy.jar ; rm -f US_export_policy.jar ; cp /tmp/local_policy.jar . ; cp /tmp/US_export_policy.jar .
+ 
+- name: Manage Java Dir Permission
+  shell: cd /usr/java ; chown root:root jre1.8.0_51 -R
+- name: install  glibc.i686
+  yum:
+   name: glibc.i686
+   state: installed
+      
+- unarchive: src=/tmp/SymantecEndpointProtection.zip dest=/tmp copy=no force=yes
+ 
+ 
+- name: Executing Script
+  shell: sh /tmp/install.sh -i
+- name: restart symcfgd
+  service: name=symcfgd state=restarted
+ 
+- name: start smcd
+  service: name={{ item }} state=started
+  with_items:
+  - smcd
+  - rtvscand
+- name: Checking for liveUpdae
+  shell: cd /opt/Symantec/symantec_antivirus ; ./sav liveupdate -u
+  ignore_errors: yes

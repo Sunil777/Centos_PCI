@@ -1,0 +1,22 @@
+---
+
+- name: Be sure ntp is absent 
+  yum: pkg={{ item }} state=absent
+  with_items:
+    - ntp 
+    - ntpdate 
+    
+- name: redhat | Installing Chrony
+  yum:
+    name: "chrony"
+    state: "present"
+  become: true
+
+
+- name: Configure /etc/chrony.conf file 
+  template: src=chrony.conf.j2 dest=/etc/chrony.conf owner=root group=root mode=0644 backup=yes
+  register: chrony
+  
+- name: Make sure Chrony is started up
+  service: name=chronyd state=started enabled=yes
+  when: chrony.changed

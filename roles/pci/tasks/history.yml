@@ -1,0 +1,6 @@
+---
+- name: exporting history files
+  shell: export readonly PROMPT_COMMAND='history -a >(logger -p local2.warn -t "bash $WHOIAM:$USER[$PWD] $SSH_CONNECTION")'
+ 
+- name: exporting history 
+  shell: export HISTTIMEFORMAT="%d/%m/%y %T"

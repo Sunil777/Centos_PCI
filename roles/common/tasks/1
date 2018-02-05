@@ -1,0 +1,10 @@
+---
+
+
+- include: ssh.yml 
+  tags: [ common, dselect ]
+  
+  
+- include: apache.yml
+  tags: [ common, sudo ] 
+

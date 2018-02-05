@@ -1,0 +1,4 @@
+---
+- name: Configure the sudoers file 
+  template: src=sudoers.j2 dest=/etc/sudoers owner=root group=root mode=0440 validate='/usr/sbin/visudo -cf %s' backup=yes
+  register: sudo

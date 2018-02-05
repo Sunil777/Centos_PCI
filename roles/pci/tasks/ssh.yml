@@ -1,0 +1,12 @@
+---
+- name: Configure /etc/ssh/sshd_config file 
+  template: src=sshd_config.j2 dest=/etc/ssh/sshd_config owner=root group=root mode=0644 backup=yes
+  register: ssh
+  
+- name: Configure /etc/issue.net file 
+  template: src=issue.net.j2 dest=/etc/issue.net owner=root group=root mode=0644
+  
+- name: Restart sshd service
+  service: name=sshd state=restarted
+  when: ssh.changed
+  

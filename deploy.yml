@@ -1,0 +1,6 @@
+- hosts: "{{host}}"
+#  any_errors_fatal: True
+#  max_fail_percentage: 0
+  gather_facts: True
+  roles:
+    - "{{ role }}"

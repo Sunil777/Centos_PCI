@@ -1,0 +1,7 @@
+---
+- name: disk check
+  shell: df -h
+  
+- name: ram check
+  shell: free -m
+

@@ -1,0 +1,4 @@
+- hosts: "{{host}}"
+  gather_facts: True
+  tasks:
+    - include: "{{ path }}/roles/ServerStart/tasks/symentic.yml"
